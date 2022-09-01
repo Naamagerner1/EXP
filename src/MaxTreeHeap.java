@@ -20,14 +20,14 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         int l = 2*i;
         int n = A.length;
         int bigest;
-        if ((l <= n) && (A[l] > A[i])){
+        if ((l < n) && (A[l] > A[i])){
             bigest = l ;
         }
         else {
             bigest = i ;
         }
         int r = 2*i + 1;
-        if ((r <= n) && (A[r] > A[bigest])){
+        if ((r < n) && (A[r] > A[bigest])){
             bigest = r ;
         }
         if (bigest != i) {

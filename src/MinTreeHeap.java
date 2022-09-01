@@ -22,14 +22,14 @@ public class MinTreeHeap {
         int l = 2*i;
         int n = A.length;
         int smallest;
-        if ((l <= n) && (A[l] < A[i])){
+        if ((l < n) && (A[l] < A[i])){
             smallest = l ;
         }
         else {
             smallest = i ;
         }
         int r = 2*i + 1;
-        if ((r <= n) && (A[r] < A[smallest])){
+        if ((r < n) && (A[r] < A[smallest])){
             smallest = r ;
         }
         if (smallest != i) {
