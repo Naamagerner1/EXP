@@ -52,7 +52,7 @@ public class MinTreeHeap {
         Vertex[] B = new Vertex[n+1] ;
         B[0] = null;
         for (int i=1; i<n+1; i++) {
-            int data = A[i-1];
+            int data = ACopy[i];
             B[i] = new Vertex(data);
             B[i].setIndex(i);
         }
@@ -102,7 +102,7 @@ public class MinTreeHeap {
 
     public int findPathLastToRoot(int[] pathLastToRoot) {
         int limit = 0;
-        for (int i = size; i > 0; i = i / 2) {
+        for (int i = size; i > 1; i = i / 2) {
             pathLastToRoot[limit] = i % 2;
             limit++;
         }
