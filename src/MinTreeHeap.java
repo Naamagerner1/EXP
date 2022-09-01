@@ -103,7 +103,7 @@ public class MinTreeHeap {
     public int findPathLastToRoot(int[] pathLastToRoot) {
         int limit = 0;
         for (int i = size; i > 1; i = i / 2) {
-            pathLastToRoot[limit] = i % 2;
+            pathLastToRoot[limit+1] = i % 2;
             limit++;
         }
         return limit;
@@ -177,7 +177,7 @@ public class MinTreeHeap {
         else {
             smallest = vertex;
         }
-        if (vertex.getRight() != null && vertex.getRight().getData() < vertex.getData()){
+        if (vertex.getRight() != null && vertex.getRight().getData() < smallest.getData()){
             smallest = vertex.getRight();
         }
         if (smallest != vertex){
@@ -198,23 +198,28 @@ public class MinTreeHeap {
     }
 
     public void printByLayer(DataOutputStream out) throws IOException{
-        int[] heapArr = new int[size];
+        int[] heapArr = new int[size+1];
         inOrder(root, heapArr);
 
-        out.writeInt(heapArr[0]);
+        boolean jOverSize = false;
+        out.writeBytes(Integer.toString(heapArr[0]));
         out.writeBytes(System.lineSeparator());
         int j = 1;
         for (int i = 2; i<size; i++){
             int limitIndex = 2^i;
-            if (j > size){
+            if (jOverSize){
                 break;
             }
             while (j < limitIndex){
-                out.writeInt(heapArr[j]);
+                out.writeBytes(Integer.toString(heapArr[j]));
                 if (j+1 != limitIndex){
                     out.writeBytes(",");
                 }
                 j++;
+                if (j >= size){
+                    jOverSize = true;
+                    break;
+                }
             }
             out.writeBytes(System.lineSeparator());
         }

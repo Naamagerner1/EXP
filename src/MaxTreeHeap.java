@@ -20,14 +20,14 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         int l = 2*i;
         int n = A.length;
         int bigest;
-        if ((l <= n) && (A[l] > A[i])){
+        if ((l < n) && (A[l] > A[i])){
             bigest = l ;
         }
         else {
             bigest = i ;
         }
         int r = 2*i + 1;
-        if ((r <= n) && (A[r] > A[bigest])){
+        if ((r < n) && (A[r] > A[bigest])){
             bigest = r ;
         }
         if (bigest != i) {
@@ -61,8 +61,12 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             else {
                 B[i].setParent(B[(i - 1) / 2]);
             }
-            B[i].setLeft(B[2*i]);
-            B[i].setRight(B[2*i + 1]);
+            if (2*i < n+1){
+                B[i].setLeft(B[2*i]);
+            }
+            if (2*i + 1 < n+1) {
+                B[i].setRight(B[2*i + 1]);
+            }
         }
         B[1].setParent(null);
         MaxTreeHeap H = new MaxTreeHeap(A);
@@ -97,7 +101,7 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
     public int findPathLastToRoot(int[] pathLastToRoot) {
         int limit = 0;
         for (int i = size; i > 1; i = i / 2) {
-            pathLastToRoot[limit] = i % 2;
+            pathLastToRoot[limit+1] = i % 2;
             limit++;
         }
         return limit;
@@ -193,21 +197,25 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
     public void printByLayer(DataOutputStream out) throws IOException{
         int[] heapArr = new int[size];
         inOrder(root, heapArr);
-
-        out.writeInt(heapArr[0]);
+        boolean jOverSize = false;
+        out.writeBytes(Integer.toString(heapArr[0]));
         out.writeBytes(System.lineSeparator());
         int j = 1;
         for (int i = 2; i<size; i++){
-            int limitIndex = 2^i;
-            if (j > size){
+            if (jOverSize){
                 break;
             }
+            int limitIndex = 2^i;
             while (j < limitIndex){
-                out.writeInt(heapArr[j]);
+                out.writeBytes(Integer.toString(heapArr[j]));
                 if (j+1 != limitIndex){
                     out.writeBytes(",");
                 }
                 j++;
+                if (j >= size){
+                    jOverSize = true;
+                    break;
+                }
             }
             out.writeBytes(System.lineSeparator());
         }
