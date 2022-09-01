@@ -6,8 +6,15 @@ public class MinTreeHeap {
     private int size;
 
 
-    public MinTreeHeap(int[] A){  // is A full? no garbige
+    public MinTreeHeap(int[] A){
         this.size = A.length;
+    }
+
+    public Vertex getRoot(){
+        return root;
+    }
+    public int getSize(){
+        return size;
     }
 
 
@@ -86,7 +93,6 @@ public class MinTreeHeap {
     }
 
     public int findPathLastToRoot(int[] pathLastToRoot) {
-        //int[] pathLastToRoot = new int[size];  //find the path from last to root
         int limit = 0;
         for (int i = size; i > 0; i = i / 2) {
             pathLastToRoot[limit] = i % 2;
@@ -96,7 +102,7 @@ public class MinTreeHeap {
     }
 
     public Vertex findAndAddLast (int limit, int[] pathLastToRoot){
-        Integer myInf = Integer.MAX_VALUE;          // is it ok? should be infinity
+        Integer myInf = Integer.MAX_VALUE;
         Vertex newVertex = new Vertex(myInf);
         newVertex.setIndex(size);
 
@@ -109,6 +115,7 @@ public class MinTreeHeap {
                 else {
                     last.setRight(newVertex);
                 }
+                newVertex.setParent(last);
             }
             if (pathLastToRoot[limit] == 0){
                 last = last.getLeft();
@@ -122,19 +129,14 @@ public class MinTreeHeap {
     }
 
 
-    public int HeapExtractMin(){
-        if (size < 1){
-            return -1; //////////should throw exception?
+    public int HeapExtractMin() {
+        if (size < 1) {
+            return -1;
         }
         int min = root.getData();
 
         int[] pathLastToRoot = new int[size];
         int limit = findPathLastToRoot(pathLastToRoot); //find the path from last to root
-        /*int j=0;
-        for (int i=size; i>0; i=i/2){
-            pathLastToRoot[j] = i%2;
-            j++;
-        }*/
 
         Vertex last = root;
         while (limit>0){                          //find the last vertex

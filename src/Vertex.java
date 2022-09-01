@@ -6,9 +6,8 @@ public class Vertex {
     private Vertex parent;
 
     public Vertex(int data) {
-        //Assign data to the new node, set left and right children to null
         this.data = data;
-        this.index = index;
+        //this.index = index;
         this.left = null;
         this.right = null;
         this.parent = null;
