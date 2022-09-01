@@ -42,8 +42,12 @@ public class MinTreeHeap {
 
     public static MinTreeHeap BuildHeapT(int[] A){
         int n = A.length;
+        int[] ACopy = new int[n+1];
+        for (int i=1; i<n+1; i++){
+            ACopy[i] = A[i-1];
+        }
         for (int i = n; i>0; i--){
-            Heapify(A,i);
+            Heapify(ACopy,i);
         }
         Vertex[] B = new Vertex[n+1] ;
         B[0] = null;
@@ -59,8 +63,12 @@ public class MinTreeHeap {
             else {
                 B[i].setParent(B[(i - 1) / 2]);
             }
-            B[i].setLeft(B[2*i]);
-            B[i].setRight(B[2*i + 1]);
+            if (2*i < n+1){
+                B[i].setLeft(B[2*i]);
+            }
+            if (2*i + 1 < n+1) {
+                B[i].setRight(B[2*i + 1]);
+            }
         }
         B[1].setParent(null);
         MinTreeHeap H = new MinTreeHeap(A);

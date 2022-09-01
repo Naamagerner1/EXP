@@ -20,14 +20,14 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         int l = 2*i;
         int n = A.length;
         int bigest;
-        if ((l < n) && (A[l] > A[i])){
+        if ((l <= n) && (A[l] > A[i])){
             bigest = l ;
         }
         else {
             bigest = i ;
         }
         int r = 2*i + 1;
-        if ((r < n) && (A[r] > A[bigest])){
+        if ((r <= n) && (A[r] > A[bigest])){
             bigest = r ;
         }
         if (bigest != i) {
@@ -40,8 +40,12 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
 
     public static MaxTreeHeap BuildHeapT(int[] A){
         int n = A.length;
+        int[] ACopy = new int[n+1];
+        for (int i=1; i<n+1; i++){
+            ACopy[i] = A[i-1];
+        }
         for (int i = n; i>0; i--){
-            Heapify(A,i);
+            Heapify(ACopy,i);
         }
         Vertex[] B = new Vertex[n+1] ;
         B[0] = null;
