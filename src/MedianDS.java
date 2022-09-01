@@ -79,7 +79,7 @@ public class MedianDS {
             return select(ACopy, i);
         }
         else {
-            int [] ACopy = new int[q];
+            int [] ACopy = new int[n-(q+1)];
             for (int j = q+1, k = 0 ; j<n ; j++, k++){
                 ACopy[k] = A[j];
             }
