@@ -210,7 +210,7 @@ public class MinTreeHeap {
             if (jOverSize){
                 break;
             }
-            while (j < limitIndex){
+            while (j < limitIndex-1){
                 out.writeBytes(Integer.toString(heapArr[j]));
                 if (j+1 < limitIndex-1){
                     out.writeBytes(",");

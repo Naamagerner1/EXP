@@ -206,9 +206,9 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
                 break;
             }
             int limitIndex = power(i);
-            while (j < limitIndex){
+            while (j < limitIndex-1){
                 out.writeBytes(Integer.toString(heapArr[j]));
-                if (j+1 != limitIndex){
+                if (j+1 < limitIndex-1){
                     out.writeBytes(",");
                 }
                 j++;
