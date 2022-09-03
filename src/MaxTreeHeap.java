@@ -205,7 +205,7 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             if (jOverSize){
                 break;
             }
-            int limitIndex = 2^i;
+            int limitIndex = power(i);
             while (j < limitIndex){
                 out.writeBytes(Integer.toString(heapArr[j]));
                 if (j+1 != limitIndex){
@@ -219,6 +219,14 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             }
             out.writeBytes(System.lineSeparator());
         }
+    }
+
+    public int power(int power){
+        int result = 1;
+        for (int i=0; i<power; i++) {
+            result = result * 2;
+        }
+        return result;
     }
 
 }

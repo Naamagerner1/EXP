@@ -206,7 +206,7 @@ public class MinTreeHeap {
         out.writeBytes(System.lineSeparator());
         int j = 1;
         for (int i = 2; i<size; i++){
-            int limitIndex = 2^i;
+            int limitIndex = power(i);
             if (jOverSize){
                 break;
             }
@@ -223,6 +223,14 @@ public class MinTreeHeap {
             }
             out.writeBytes(System.lineSeparator());
         }
+    }
+
+    public int power(int power){
+        int result = 1;
+        for (int i=0; i<power; i++) {
+            result = result * 2;
+        }
+        return result;
     }
 
 

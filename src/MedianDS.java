@@ -4,7 +4,7 @@ public class MedianDS {
 
     public MedianDS(int[] A){
         int n = A.length;
-        int median = select(A, n/2);
+        int median = select(A, n/2, 0, n-1);
         int SSize, LSize;
         if (n % 2 == 0){
             SSize = n/2;
@@ -48,26 +48,38 @@ public class MedianDS {
         return p+q-1;
     }
 
-    public int select(int[] A, int i){
-        if (i == 0){
+    public int select(int[] A, int i, int left, int right) {
+        int n = A.length;
+        if (i == 0) {
             return A[0];
         }
-        int n = A.length;
         boolean haveResidual = false;
         int residual = 0;
-        int munGroups;
-        if (n % 5 == 0){
-            munGroups = n/5;
-        }
-        else {
-            munGroups = (n/5) + 1;
+        int numGroups;
+        if (n % 5 == 0) {
+            numGroups = n / 5;
+        } else {
+            numGroups = (n / 5) + 1;
             haveResidual = true;
             residual = n % 5;
         }
-        int[] mediansForGroups = new int[munGroups];
-        findMedianForEachGroup(munGroups, haveResidual, residual, A, mediansForGroups); //find median for each group
-        int x = select(mediansForGroups, munGroups/2);
-        int q = partition(A, 0,n-1, x);
+        int[] mediansForGroups = new int[numGroups];
+        findMedianForEachGroup(numGroups, haveResidual, residual, A, mediansForGroups); //find median for each group
+        int x = select(mediansForGroups, numGroups / 2, left, right);
+        int q = partition(A, left, right, x);
+        if (left == right){
+            return A[left];
+        }
+        if (i==q){
+            return A[i];
+        }
+        else if (i<q){
+            return select(A, i, left, q-1);
+        }
+        else{
+            return select(A, i, q+1, right);
+        }
+        /*
         if (i==q){
             return x;
         }
@@ -76,15 +88,17 @@ public class MedianDS {
             for (int j = 0; j<q;j++){
                 ACopy[j] = A[j];
             }
-            return select(ACopy, i);
+            select(ACopy, i);
         }
         else {
             int [] ACopy = new int[n-(q+1)];
             for (int j = q+1, k = 0 ; j<n ; j++, k++){
                 ACopy[k] = A[j];
             }
-            return select(ACopy, i-q);
+            select(ACopy, i-q);
         }
+        return 0;
+    }*/
     }
 
     public void findMedianForEachGroup(int munGroups, boolean haveResidual, int residual, int[] A, int[] mediansForGroups){
