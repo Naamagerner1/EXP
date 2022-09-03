@@ -207,19 +207,15 @@ public class MinTreeHeap {
         int j = 1;
         for (int i = 2; i<size; i++){
             int limitIndex = power(i);
-            if (jOverSize){
+            if (j >= size){
                 break;
             }
-            while (j < limitIndex-1){
+            while ((j < limitIndex-1) && (j < size)){
                 out.writeBytes(Integer.toString(heapArr[j]));
-                if (j+1 < limitIndex-1){
+                if ((j+1 < limitIndex-1) && (j<size-1)) {
                     out.writeBytes(",");
                 }
                 j++;
-                if (j >= size){
-                    jOverSize = true;
-                    break;
-                }
             }
             out.writeBytes(System.lineSeparator());
         }
