@@ -48,7 +48,36 @@ public class MedianDS {
         return p+q-1;
     }
 
-    public int select(int[] A, int i, int left, int right) {
+    /*public int partition2(int[] A, int left, int right, int x){
+        int xCurrIndex = 0;
+        for (int i=left; i<right; i++){
+            if (A[i] == x){
+                xCurrIndex = i;
+                break;
+            }
+        }
+        int temp = A[xCurrIndex];
+        A[xCurrIndex] = right;
+        A[right] = temp;
+        //swap(A, xCurrIndex, right);
+        int q = left;
+        for (int i=left; i<right-1; i++){
+            if (A[i] < x){
+                swap(A,q,i);
+                q++;
+            }
+        }
+        swap(A,right,q);
+        return q;
+    }*/
+
+    public void swap(int[] A, int a, int b){
+        int temp = A[a];
+        A[a] = b;
+        A[b] = temp;
+    }
+
+    public int select(int[] A, int i) {
         int n = A.length;
         if (i == 0) {
             return A[0];
@@ -65,8 +94,8 @@ public class MedianDS {
         }
         int[] mediansForGroups = new int[numGroups];
         findMedianForEachGroup(numGroups, haveResidual, residual, A, mediansForGroups); //find median for each group
-        int x = select(mediansForGroups, numGroups / 2, left, right);
-        int q = partition(A, left, right, x);
+        int x = select(mediansForGroups, numGroups / 2);
+        int q = partition(A, 0,n-1,x);
         if (left == right){
             return A[left];
         }
