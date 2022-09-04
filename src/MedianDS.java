@@ -4,7 +4,7 @@ public class MedianDS {
 
     public MedianDS(int[] A){
         int n = A.length;
-        int median = select(A, n/2, 0, n-1);
+        int median = select(A, n/2);
         int SSize, LSize;
         if (n % 2 == 0){
             SSize = n/2;
@@ -79,6 +79,9 @@ public class MedianDS {
 
     public int select(int[] A, int i) {
         int n = A.length;
+        if (n == 0){
+            return 0;
+        }
         if (i == 0) {
             return A[0];
         }
@@ -96,19 +99,6 @@ public class MedianDS {
         findMedianForEachGroup(numGroups, haveResidual, residual, A, mediansForGroups); //find median for each group
         int x = select(mediansForGroups, numGroups / 2);
         int q = partition(A, 0,n-1,x);
-        if (left == right){
-            return A[left];
-        }
-        if (i==q){
-            return A[i];
-        }
-        else if (i<q){
-            return select(A, i, left, q-1);
-        }
-        else{
-            return select(A, i, q+1, right);
-        }
-        /*
         if (i==q){
             return x;
         }
@@ -117,17 +107,15 @@ public class MedianDS {
             for (int j = 0; j<q;j++){
                 ACopy[j] = A[j];
             }
-            select(ACopy, i);
+            return select(ACopy, i);
         }
         else {
             int [] ACopy = new int[n-(q+1)];
             for (int j = q+1, k = 0 ; j<n ; j++, k++){
                 ACopy[k] = A[j];
             }
-            select(ACopy, i-q);
+            return select(ACopy, i-q);
         }
-        return 0;
-    }*/
     }
 
     public void findMedianForEachGroup(int munGroups, boolean haveResidual, int residual, int[] A, int[] mediansForGroups){
