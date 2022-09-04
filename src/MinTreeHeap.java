@@ -89,7 +89,6 @@ public class MinTreeHeap {
             return;  //Error new key is larger than current key
         }
         curr.setData(k);
-
         while (i > 1 && curr.getData() < curr.getParent().getData()) {
             Vertex parent = curr.getParent();
             int temp = curr.getData();
@@ -198,10 +197,9 @@ public class MinTreeHeap {
     }
 
     public void printByLayer(DataOutputStream out) throws IOException{
-        int[] heapArr = new int[size+1];
+        int[] heapArr = new int[size];
         inOrder(root, heapArr);
 
-        boolean jOverSize = false;
         out.writeBytes(Integer.toString(heapArr[0]));
         out.writeBytes(System.lineSeparator());
         int j = 1;

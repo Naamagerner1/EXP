@@ -10,6 +10,10 @@ public class Main {
         MinTreeHeap min =  MinTreeHeap.BuildHeapT(A);
         min.HeapInsert(27);
         min.HeapInsert(28);
+        min.HeapInsert(40);
+        min.HeapInsert(35);
+        min.HeapInsert(60);
+        min.HeapInsert(65);
 
         DataOutputStream outStream = new DataOutputStream(out);
         min.printByLayer(outStream);
