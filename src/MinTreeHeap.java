@@ -76,20 +76,62 @@ public class MinTreeHeap {
         return H;
     }
 
+
+    public void HeapInsert(int k){
+        size++;
+        Vertex newVertex = new Vertex(k);
+        newVertex.setIndex(size);
+        if (root == null) {
+            root = newVertex;
+        }
+        else {
+            int[] pathLastToRoot = new int[size];
+            int limit = findPathLastToRoot(pathLastToRoot);
+            Vertex last = root;
+            while (limit>0){                          //find the last vertex
+                if (limit==1){
+                    if (pathLastToRoot[limit] == 0) {
+                        last.setLeft(newVertex);
+                    }
+                    else {
+                        last.setRight(newVertex);
+                    }
+                    newVertex.setParent(last);
+                }
+                if (pathLastToRoot[limit] == 0){
+                    last = last.getLeft();
+                }
+                else{
+                    last = last.getRight();
+                }
+                limit--;
+            }
+            while ((last.getParent() != null) && (last.getData() < last.getParent().getData())){
+                SwapData(last, last.getParent());
+            }
+        }
+    }
+
+    private void SwapData(Vertex a,Vertex b){
+        int x = a.getData();
+        a.setData(b.getData());
+        b.setData(x);
+    }
+/*
     public void HeapInsert (int k){
         size++;
         int[] pathLastToRoot = new int[size];
         int limit = findPathLastToRoot(pathLastToRoot);
         Vertex newVertex = findAndAddLast(limit, pathLastToRoot);
         Heap_Decrease_key(newVertex, size, k);
-    }
+    }*/
 
     public void Heap_Decrease_key(Vertex curr, int i, int k) {
         if (k > curr.getData()) {
             return;  //Error new key is larger than current key
         }
         curr.setData(k);
-        while (i > 1 && curr.getData() < curr.getParent().getData()) {
+        while ((i > 1) &&(curr.getData() < curr.getParent().getData())) {
             Vertex parent = curr.getParent();
             int temp = curr.getData();
             curr.setData(parent.getData());
@@ -163,6 +205,7 @@ public class MinTreeHeap {
             last.getParent().setRight(null);
         }
         last.setParent(null);
+        last.setIndex(-1);
         size--;
         HeapifyTree(root);
         return min;

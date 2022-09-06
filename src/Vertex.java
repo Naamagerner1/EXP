@@ -7,7 +7,6 @@ public class Vertex {
 
     public Vertex(int data) {
         this.data = data;
-        //this.index = index;
         this.left = null;
         this.right = null;
         this.parent = null;
