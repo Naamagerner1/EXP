@@ -3,7 +3,12 @@ public class MedianDS {
     MaxTreeHeap S;
 
     public MedianDS(int[] A){
-        int n = A.length;
+        int n = A.length ;
+        int[] ACopy = new int[n+1];
+        ACopy[0] = -1;
+        for (int i = 1; i<n+1; i++){
+            ACopy[i] = A[i-1];
+        }
         int median = select(A, n/2);
         int SSize, LSize;
         if (n % 2 == 0){
@@ -79,10 +84,7 @@ public class MedianDS {
 
     public int select(int[] A, int i) {
         int n = A.length;
-        if (n == 0){
-            return 0;
-        }
-        if (i == 0) {
+        if (n == 1) {
             return A[0];
         }
         boolean haveResidual = false;
@@ -103,14 +105,14 @@ public class MedianDS {
             return x;
         }
         else if (i<q){
-            int [] ACopy = new int[q];
-            for (int j = 0; j<q;j++){
+            int [] ACopy = new int[q-1];
+            for (int j = 0; j<q-1;j++){
                 ACopy[j] = A[j];
             }
             return select(ACopy, i);
         }
         else {
-            int [] ACopy = new int[n-(q+1)];
+            int [] ACopy = new int[n-q];
             for (int j = q+1, k = 0 ; j<n ; j++, k++){
                 ACopy[k] = A[j];
             }
