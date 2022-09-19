@@ -10,6 +10,7 @@ public class Vertex {
         this.left = null;
         this.right = null;
         this.parent = null;
+        this.index = -1;
     }
 
     public void setParent(Vertex parent) {

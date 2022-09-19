@@ -57,12 +57,7 @@ public class MinTreeHeap {
             B[i].setIndex(i);
         }
         for (int i=1; i<n+1; i++) {
-            if (i % 2 == 0) {
-                B[i].setParent(B[i / 2]);
-            }
-            else {
-                B[i].setParent(B[(i - 1) / 2]);
-            }
+            B[i].setParent(B[i / 2]); ///////////////////////////////////////////
             if (2*i < n+1){
                 B[i].setLeft(B[2*i]);
             }
@@ -108,6 +103,7 @@ public class MinTreeHeap {
             }
             while ((last.getParent() != null) && (last.getData() < last.getParent().getData())){
                 SwapData(last, last.getParent());
+                last = last.getParent();
             }
         }
     }
@@ -230,6 +226,7 @@ public class MinTreeHeap {
         }
     }
 
+
     private static void inOrder(Vertex node, int[] heapArr) {
         if (node == null) {
             return;
@@ -294,6 +291,48 @@ public class MinTreeHeap {
             parent.setLeft(tempVertex.getLeft());
             parent.setRight(tempVertex.getRight());
             parent.setIndex(tempVertex.getIndex());
+     */
+
+
+    /*
+    public void printByLayer(DataOutputStream out) throws IOException{
+        // Base Case
+        if(root == null)
+            return;
+        Vertex[] q = new Vertex[size];
+        int queue_size = 0;
+        int front = 0, end =0;
+        q[end++] = root;
+        queue_size++;
+        while(true)
+        {
+            // nodeCount (queue size) indicates number of nodes
+            // at current level.
+            int nodeCount = queue_size;
+            if(nodeCount == 0)
+                break;
+            // Dequeue all nodes of current level and Enqueue all
+            // nodes of next level
+            while(nodeCount > 0) {
+                Vertex current = q[front];
+                nodeCount--;
+                queue_size--;
+                front++;
+                out.writeBytes(Integer.toString(current.getData()));
+                if (current.getLeft() != null) {
+                    q[end++] = current.getLeft();
+                    queue_size++;
+                }
+                if (current.getRight() != null) {
+                    q[end++] = current.getRight();
+                    queue_size++;
+                }
+                if(nodeCount!=0)
+                    out.writeBytes(", ");
+            }
+            out.writeBytes(System.lineSeparator());
+        }
+    }
      */
 
 }

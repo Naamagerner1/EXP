@@ -1,9 +1,10 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class MaxTreeHeap {  // can we connect Min and Max , they have similar print function
+public class MaxTreeHeap {
     private Vertex root;
     private int size;
+
 
     public MaxTreeHeap(int[] A){
         this.size = A.length;
@@ -16,25 +17,26 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         return size;
     }
 
+
     public static void Heapify(int[] A, int i){
         int l = 2*i;
         int n = A.length;
-        int bigest;
+        int biggest;
         if ((l < n) && (A[l] > A[i])){
-            bigest = l ;
+            biggest = l ;
         }
         else {
-            bigest = i ;
+            biggest = i ;
         }
         int r = 2*i + 1;
-        if ((r < n) && (A[r] > A[bigest])){
-            bigest = r ;
+        if ((r < n) && (A[r] > A[biggest])){
+            biggest = r ;
         }
-        if (bigest != i) {
+        if (biggest != i) {
             int temp = A[i];
-            A[i] = A[bigest];
-            A[bigest] = temp;
-            Heapify(A, bigest);
+            A[i] = A[biggest];
+            A[biggest] = temp;
+            Heapify(A, biggest);
         }
     }
 
@@ -55,12 +57,7 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             B[i].setIndex(i);
         }
         for (int i=1; i<n+1; i++) {
-            if (i % 2 == 0) {
-                B[i].setParent(B[i / 2]);
-            }
-            else {
-                B[i].setParent(B[(i - 1) / 2]);
-            }
+            B[i].setParent(B[i / 2]); ///////////////////////////////////////////
             if (2*i < n+1){
                 B[i].setLeft(B[2*i]);
             }
@@ -73,6 +70,7 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         H.root = B[1];
         return H;
     }
+
 
     public void HeapInsert(int k){
         size++;
@@ -105,6 +103,7 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             }
             while ((last.getParent() != null) && (last.getData() > last.getParent().getData())){
                 SwapData(last, last.getParent());
+                last = last.getParent();
             }
         }
     }
@@ -114,23 +113,21 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         a.setData(b.getData());
         b.setData(x);
     }
-
 /*
     public void HeapInsert (int k){
         size++;
         int[] pathLastToRoot = new int[size];
         int limit = findPathLastToRoot(pathLastToRoot);
         Vertex newVertex = findAndAddLast(limit, pathLastToRoot);
-        Heap_Increase_key(newVertex, size, k);
+        Heap_Decrease_key(newVertex, size, k);
     }*/
 
-    public void Heap_Increase_key(Vertex curr, int i, int k) {
-        if (k < curr.getData()) {
+    public void Heap_Decrease_key(Vertex curr, int i, int k) {
+        if (k > curr.getData()) {
             return;  //Error new key is larger than current key
         }
         curr.setData(k);
-
-        while (i > 1 && curr.getData() > curr.getParent().getData()) {
+        while ((i > 1) &&(curr.getData() < curr.getParent().getData())) {
             Vertex parent = curr.getParent();
             int temp = curr.getData();
             curr.setData(parent.getData());
@@ -150,8 +147,8 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
     }
 
     public Vertex findAndAddLast (int limit, int[] pathLastToRoot){
-        Integer myMinusInf = Integer.MIN_VALUE;
-        Vertex newVertex = new Vertex(myMinusInf);
+        Integer myInf = Integer.MAX_VALUE;
+        Vertex newVertex = new Vertex(myInf);
         newVertex.setIndex(size);
 
         Vertex last = root;
@@ -176,8 +173,9 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         return newVertex;
     }
 
-    public int HeapExtractMax(){
-        if (size < 1){
+
+    public int HeapExtractMax() {
+        if (size < 1) {
             return -1;
         }
         int max = root.getData();
@@ -203,29 +201,31 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
             last.getParent().setRight(null);
         }
         last.setParent(null);
+        last.setIndex(-1);
         size--;
         HeapifyTree(root);
         return max;
     }
 
     public void HeapifyTree(Vertex vertex){
-        Vertex bigest;
+        Vertex biggest;
         if (vertex.getLeft() != null && vertex.getLeft().getData() > vertex.getData()){
-            bigest = vertex.getLeft();
+            biggest = vertex.getLeft();
         }
         else {
-            bigest = vertex;
+            biggest = vertex;
         }
-        if (vertex.getRight() != null && vertex.getRight().getData() > vertex.getData()){
-            bigest = vertex.getRight();
+        if (vertex.getRight() != null && vertex.getRight().getData() > biggest.getData()){
+            biggest = vertex.getRight();
         }
-        if (bigest != vertex){
-            int temp = bigest.getData();
-            bigest.setData(vertex.getData());
+        if (biggest != vertex){
+            int temp = biggest.getData();
+            biggest.setData(vertex.getData());
             vertex.setData(temp);
-            HeapifyTree(bigest);
+            HeapifyTree(biggest);
         }
     }
+
 
     private static void inOrder(Vertex node, int[] heapArr) {
         if (node == null) {
@@ -239,14 +239,15 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
     public void printByLayer(DataOutputStream out) throws IOException{
         int[] heapArr = new int[size];
         inOrder(root, heapArr);
+
         out.writeBytes(Integer.toString(heapArr[0]));
         out.writeBytes(System.lineSeparator());
         int j = 1;
         for (int i = 2; i<size; i++){
+            int limitIndex = power(i);
             if (j >= size){
                 break;
             }
-            int limitIndex = power(i);
             while ((j < limitIndex-1) && (j < size)){
                 out.writeBytes(Integer.toString(heapArr[j]));
                 if ((j+1 < limitIndex-1) && (j<size-1)) {
@@ -265,5 +266,73 @@ public class MaxTreeHeap {  // can we connect Min and Max , they have similar pr
         }
         return result;
     }
+
+
+
+    /* swap
+    Vertex tempVertex = new Vertex(curr.getData());
+            Vertex parent = curr.getParent();
+            tempVertex.setParent(parent);
+            tempVertex.setLeft(curr.getLeft());
+            tempVertex.setRight(curr.getRight());
+            tempVertex.setIndex(curr.getIndex());
+            if (curr.getIndex() % 2 == 0){
+                curr.setLeft(parent);
+                curr.setRight(parent.getRight());
+            }
+            else {
+                curr.setRight(parent);
+                curr.setLeft(parent.getLeft());
+            }
+            curr.setParent(parent.getParent());
+            curr.setIndex(parent.getIndex());
+
+            parent.setParent(curr);
+            parent.setLeft(tempVertex.getLeft());
+            parent.setRight(tempVertex.getRight());
+            parent.setIndex(tempVertex.getIndex());
+     */
+
+
+    /*
+    public void printByLayer(DataOutputStream out) throws IOException{
+        // Base Case
+        if(root == null)
+            return;
+        Vertex[] q = new Vertex[size];
+        int queue_size = 0;
+        int front = 0, end =0;
+        q[end++] = root;
+        queue_size++;
+        while(true)
+        {
+            // nodeCount (queue size) indicates number of nodes
+            // at current level.
+            int nodeCount = queue_size;
+            if(nodeCount == 0)
+                break;
+            // Dequeue all nodes of current level and Enqueue all
+            // nodes of next level
+            while(nodeCount > 0) {
+                Vertex current = q[front];
+                nodeCount--;
+                queue_size--;
+                front++;
+                out.writeBytes(Integer.toString(current.getData()));
+                if (current.getLeft() != null) {
+                    q[end++] = current.getLeft();
+                    queue_size++;
+                }
+                if (current.getRight() != null) {
+                    q[end++] = current.getRight();
+                    queue_size++;
+                }
+                if(nodeCount!=0)
+                    out.writeBytes(", ");
+            }
+            out.writeBytes(System.lineSeparator());
+        }
+    }
+     */
 
 }
