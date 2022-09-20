@@ -10,13 +10,9 @@ public class MinTreeHeap {
         this.size = A.length;
     }
 
-    public Vertex getRoot(){
-        return root;
-    }
     public int getSize(){
         return size;
     }
-
 
     public static void Heapify(int[] A, int i){
         int l = 2*i;
@@ -57,7 +53,7 @@ public class MinTreeHeap {
             B[i].setIndex(i);
         }
         for (int i=1; i<n+1; i++) {
-            B[i].setParent(B[i / 2]); ///////////////////////////////////////////
+            B[i].setParent(B[i / 2]);
             if (2*i < n+1){
                 B[i].setLeft(B[2*i]);
             }
@@ -72,68 +68,28 @@ public class MinTreeHeap {
     }
 
 
-    public void HeapInsert(int k){
-        size++;
-        Vertex newVertex = new Vertex(k);
-        newVertex.setIndex(size);
-        if (root == null) {
-            root = newVertex;
-        }
-        else {
-            int[] pathLastToRoot = new int[size];
-            int limit = findPathLastToRoot(pathLastToRoot);
-            Vertex last = root;
-            while (limit>0){                          //find the last vertex
-                if (limit==1){
-                    if (pathLastToRoot[limit] == 0) {
-                        last.setLeft(newVertex);
-                    }
-                    else {
-                        last.setRight(newVertex);
-                    }
-                    newVertex.setParent(last);
-                }
-                if (pathLastToRoot[limit] == 0){
-                    last = last.getLeft();
-                }
-                else{
-                    last = last.getRight();
-                }
-                limit--;
-            }
-            while ((last.getParent() != null) && (last.getData() < last.getParent().getData())){
-                SwapData(last, last.getParent());
-                last = last.getParent();
-            }
-        }
-    }
-
     private void SwapData(Vertex a,Vertex b){
         int x = a.getData();
         a.setData(b.getData());
         b.setData(x);
     }
-/*
+
     public void HeapInsert (int k){
         size++;
         int[] pathLastToRoot = new int[size];
         int limit = findPathLastToRoot(pathLastToRoot);
         Vertex newVertex = findAndAddLast(limit, pathLastToRoot);
-        Heap_Decrease_key(newVertex, size, k);
-    }*/
+        Heap_Decrease_key(newVertex, k);
+    }
 
-    public void Heap_Decrease_key(Vertex curr, int i, int k) {
+    public void Heap_Decrease_key(Vertex curr, int k) {
         if (k > curr.getData()) {
             return;  //Error new key is larger than current key
         }
         curr.setData(k);
-        while ((i > 1) &&(curr.getData() < curr.getParent().getData())) {
-            Vertex parent = curr.getParent();
-            int temp = curr.getData();
-            curr.setData(parent.getData());
-            parent.setData(temp);
-
-            i = parent.getIndex();
+        while ((curr.getParent() != null) && (curr.getData() < curr.getParent().getData())) {
+            SwapData(curr, curr.getParent());
+            curr = curr.getParent();
         }
     }
 

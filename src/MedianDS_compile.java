@@ -227,4 +227,43 @@ public class MedianDS_compile {
         }
 
     }
+
+
+    /*
+    public void HeapInsert(int k){
+        size++;
+        Vertex newVertex = new Vertex(k);
+        newVertex.setIndex(size);
+        if (root == null) {
+            root = newVertex;
+        }
+        else {
+            int[] pathLastToRoot = new int[size];
+            int limit = findPathLastToRoot(pathLastToRoot);
+            Vertex last = root;
+            while (limit>0){                          //find the last vertex
+                if (limit==1){
+                    if (pathLastToRoot[limit] == 0) {
+                        last.setLeft(newVertex);
+                    }
+                    else {
+                        last.setRight(newVertex);
+                    }
+                    newVertex.setParent(last);
+                }
+                if (pathLastToRoot[limit] == 0){
+                    last = last.getLeft();
+                }
+                else{
+                    last = last.getRight();
+                }
+                limit--;
+            }
+            while ((last.getParent() != null) && (last.getData() < last.getParent().getData())){
+                SwapData(last, last.getParent());
+                last = last.getParent();
+            }
+        }
+    }
+*/
 }

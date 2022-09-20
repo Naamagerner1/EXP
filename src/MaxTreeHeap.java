@@ -57,7 +57,7 @@ public class MaxTreeHeap {
             B[i].setIndex(i);
         }
         for (int i=1; i<n+1; i++) {
-            B[i].setParent(B[i / 2]); ///////////////////////////////////////////
+            B[i].setParent(B[i / 2]);
             if (2*i < n+1){
                 B[i].setLeft(B[2*i]);
             }
@@ -71,69 +71,28 @@ public class MaxTreeHeap {
         return H;
     }
 
-
-    public void HeapInsert(int k){
-        size++;
-        Vertex newVertex = new Vertex(k);
-        newVertex.setIndex(size);
-        if (root == null) {
-            root = newVertex;
-        }
-        else {
-            int[] pathLastToRoot = new int[size];
-            int limit = findPathLastToRoot(pathLastToRoot);
-            Vertex last = root;
-            while (limit>0){                          //find the last vertex
-                if (limit==1){
-                    if (pathLastToRoot[limit] == 0) {
-                        last.setLeft(newVertex);
-                    }
-                    else {
-                        last.setRight(newVertex);
-                    }
-                    newVertex.setParent(last);
-                }
-                if (pathLastToRoot[limit] == 0){
-                    last = last.getLeft();
-                }
-                else{
-                    last = last.getRight();
-                }
-                limit--;
-            }
-            while ((last.getParent() != null) && (last.getData() > last.getParent().getData())){
-                SwapData(last, last.getParent());
-                last = last.getParent();
-            }
-        }
-    }
-
     private void SwapData(Vertex a,Vertex b){
         int x = a.getData();
         a.setData(b.getData());
         b.setData(x);
     }
-/*
+
     public void HeapInsert (int k){
         size++;
         int[] pathLastToRoot = new int[size];
         int limit = findPathLastToRoot(pathLastToRoot);
         Vertex newVertex = findAndAddLast(limit, pathLastToRoot);
-        Heap_Decrease_key(newVertex, size, k);
-    }*/
+        Heap_Increase_key(newVertex, k);
+    }
 
-    public void Heap_Decrease_key(Vertex curr, int i, int k) {
-        if (k > curr.getData()) {
-            return;  //Error new key is larger than current key
+    public void Heap_Increase_key(Vertex curr, int k) {
+        if (k < curr.getData()) {
+            return;  //Error new key is smaller than current key
         }
         curr.setData(k);
-        while ((i > 1) &&(curr.getData() < curr.getParent().getData())) {
-            Vertex parent = curr.getParent();
-            int temp = curr.getData();
-            curr.setData(parent.getData());
-            parent.setData(temp);
-
-            i = parent.getIndex();
+        while ((curr.getParent() != null) && (curr.getData() > curr.getParent().getData())) {
+            SwapData(curr, curr.getParent());
+            curr = curr.getParent();
         }
     }
 
@@ -147,8 +106,8 @@ public class MaxTreeHeap {
     }
 
     public Vertex findAndAddLast (int limit, int[] pathLastToRoot){
-        Integer myInf = Integer.MAX_VALUE;
-        Vertex newVertex = new Vertex(myInf);
+        Integer myMinusInf = Integer.MIN_VALUE;
+        Vertex newVertex = new Vertex(myMinusInf);
         newVertex.setIndex(size);
 
         Vertex last = root;
@@ -266,73 +225,5 @@ public class MaxTreeHeap {
         }
         return result;
     }
-
-
-
-    /* swap
-    Vertex tempVertex = new Vertex(curr.getData());
-            Vertex parent = curr.getParent();
-            tempVertex.setParent(parent);
-            tempVertex.setLeft(curr.getLeft());
-            tempVertex.setRight(curr.getRight());
-            tempVertex.setIndex(curr.getIndex());
-            if (curr.getIndex() % 2 == 0){
-                curr.setLeft(parent);
-                curr.setRight(parent.getRight());
-            }
-            else {
-                curr.setRight(parent);
-                curr.setLeft(parent.getLeft());
-            }
-            curr.setParent(parent.getParent());
-            curr.setIndex(parent.getIndex());
-
-            parent.setParent(curr);
-            parent.setLeft(tempVertex.getLeft());
-            parent.setRight(tempVertex.getRight());
-            parent.setIndex(tempVertex.getIndex());
-     */
-
-
-    /*
-    public void printByLayer(DataOutputStream out) throws IOException{
-        // Base Case
-        if(root == null)
-            return;
-        Vertex[] q = new Vertex[size];
-        int queue_size = 0;
-        int front = 0, end =0;
-        q[end++] = root;
-        queue_size++;
-        while(true)
-        {
-            // nodeCount (queue size) indicates number of nodes
-            // at current level.
-            int nodeCount = queue_size;
-            if(nodeCount == 0)
-                break;
-            // Dequeue all nodes of current level and Enqueue all
-            // nodes of next level
-            while(nodeCount > 0) {
-                Vertex current = q[front];
-                nodeCount--;
-                queue_size--;
-                front++;
-                out.writeBytes(Integer.toString(current.getData()));
-                if (current.getLeft() != null) {
-                    q[end++] = current.getLeft();
-                    queue_size++;
-                }
-                if (current.getRight() != null) {
-                    q[end++] = current.getRight();
-                    queue_size++;
-                }
-                if(nodeCount!=0)
-                    out.writeBytes(", ");
-            }
-            out.writeBytes(System.lineSeparator());
-        }
-    }
-     */
 
 }
