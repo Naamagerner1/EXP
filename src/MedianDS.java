@@ -4,12 +4,7 @@ public class MedianDS {
 
     public MedianDS(int[] A){
         int n = A.length ;
-        int[] ACopy = new int[n+1];
-        ACopy[0] = -1;
-        for (int i = 1; i<n+1; i++){
-            ACopy[i] = A[i-1];
-        }
-        int median = select(A, (n+1)/2);
+        int median = select(A, (n-1)/2);
         int SSize = (n+1)/2;
         int LSize = n/2;
         int[] S_A = new int[SSize];
@@ -49,8 +44,36 @@ public class MedianDS {
         for (int i=0; i<n; i++){
             A[i+p] = B[i];
         }
-        return p+q-1;
+        return p+q;
     }
+
+    public void swap(int[] A, int a, int b){
+        int temp = A[a];
+        A[a] = b;
+        A[b] = temp;
+    }
+    /*
+    public static int partition(int[] A, int low, int high)
+    {
+        int pivot = A[high], pivotloc = low;
+        for (int i = low; i <= high; i++) {
+            // inserting elements of less value
+            // to the left of the pivot location
+            if (A[i] < pivot) {
+                int temp = A[i];
+                A[i] = A[pivotloc];
+                A[pivotloc] = temp;
+                pivotloc++;
+            }
+        }
+
+        // swapping pivot to the final pivot location
+        int temp = A[high];
+        A[high] = A[pivotloc];
+        A[pivotloc] = temp;
+
+        return pivotloc;
+    }*/
 
 
 
@@ -78,13 +101,9 @@ public class MedianDS {
         return p+q-1;
     }*/
 
-    public void swap(int[] A, int a, int b){
-        int temp = A[a];
-        A[a] = b;
-        A[b] = temp;
-    }
 
-    public int select(int[] A, int i) {
+
+    public int selectHelper (int[] A){
         int n = A.length;
         if (n == 1) {
             return A[0];
@@ -101,24 +120,29 @@ public class MedianDS {
         }
         int[] mediansForGroups = new int[numGroups];
         findMedianForEachGroup(numGroups, haveResidual, residual, A, mediansForGroups); //find median for each group
-        int x = select(mediansForGroups, numGroups / 2);
-        int q = partition(A, 0,n-1,x);
-        if (i==q){ //////////////////////////////////
+        return selectHelper(mediansForGroups);
+    }
+
+    public int select(int[] A, int i) {
+        int x = selectHelper(A);
+        int n = A.length;
+        int q = partition(A, 0,n-1, x);
+        if (i==q){
             return x;
         }
         else if (i<q){
-            int [] ACopy = new int[q-1]; /////////////////////////////////////////////////
-            for (int j = 0; j<q-1;j++){
+            int [] ACopy = new int[q]; /////////////////////////////////////////////////
+            for (int j = 0; j<q;j++){
                 ACopy[j] = A[j];
             }
             return select(ACopy, i); //////////////////////
         }
         else {
-            int [] ACopy = new int[n-q];
+            int [] ACopy = new int[n-q-1];
             for (int j = q+1, k = 0 ; j<n ; j++, k++){
                 ACopy[k] = A[j];
             }
-            return select(ACopy, i-q); ////////////////////////////
+            return select(ACopy, i-q-1); ////////////////////////////
         }
     }
 
@@ -140,10 +164,7 @@ public class MedianDS {
                 }
             }
             if (haveResidual && (j == munGroups-1)){
-                if (residual-1 < 0){
-                    System.out.println("ERROREEEEEEEERERERERERERRR");
-                }
-                mediansForGroups[j] = naiveSelect(tempArr,residual/2); ////////////////////////////////
+                mediansForGroups[j] = naiveSelect(tempArr,(residual-1)/2); ////////////////////////////////
             }
             else {
                 mediansForGroups[j] = naiveSelect(tempArr,2);
